@@ -15,19 +15,23 @@ fn main() {
     let mut counter: usize = 0;
     // This is really, really stupid but it works
     'outer: for nums in processed_lines {
-        for idx in 0..nums.len() {
-            let mut new_nums = nums.clone();
-            new_nums.remove(idx);
-            if is_safe(new_nums) {
-                counter += 1;
-                continue 'outer;
+        if is_safe(&nums) {
+            counter += 1;
+        } else {
+            for idx in 0..nums.len() {
+                let mut new_nums = nums.clone();
+                new_nums.remove(idx);
+                if is_safe(&new_nums) {
+                    counter += 1;
+                    continue 'outer;
+                }
             }
         }
     }
     println!("Counter: {}", counter)
 }
 
-fn is_safe(nums: Vec<u16>) -> bool {
+fn is_safe(nums: &Vec<u16>) -> bool {
     let mut last = nums[0];
     let second_item = nums[1];
     let order = match last.cmp(&second_item) {
